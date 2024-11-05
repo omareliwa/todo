@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo/app_theme.dart';
 import 'package:todo/tabs/settings/settings_tap.dart';
+import 'package:todo/tabs/tasks/add_task_bottom_sheet.dart';
 import 'package:todo/tabs/tasks/tasks_tab.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<Widget> tabs = [
-    TasksTap(),
+    const TasksTap(),
     SettingsTap(),
   ];
   int currentTapIndex = 0;
@@ -24,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: tabs[currentTapIndex],
       bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
+        shape:  const CircularNotchedRectangle(),
         notchMargin: 10,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         padding: EdgeInsets.zero,
@@ -33,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
           currentIndex: currentTapIndex,
           onTap: (index) => setState(() => currentTapIndex = index),
           elevation: 0,
-          items: const [
+          items:  const [
             BottomNavigationBarItem(
               label: 'Tasks',
               icon: Icon(
@@ -52,7 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => showModalBottomSheet(
+            context: context, builder: (_) => const AddTaskBottomSheet()),
         child: const Icon(
           Icons.add,
           size: 32,

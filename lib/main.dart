@@ -4,7 +4,7 @@ import 'package:todo/home_screen.dart';
 import 'package:todo/tabs/tasks/tasks_tab.dart';
 
 void main() {
-  runApp(const TodoApp());
+  runApp( TodoApp());
 }
 
 class TodoApp extends StatelessWidget {

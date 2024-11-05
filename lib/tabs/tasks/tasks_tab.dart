@@ -38,14 +38,14 @@ class TasksTap extends StatelessWidget {
               padding: EdgeInsets.only(top: screenHeight * 0.12),
               child: EasyInfiniteDateTimeLine(
                 firstDate: DateTime.now().subtract(
-                  const Duration(days: 365),
+                   const Duration(days: 365),
                 ),
                 focusDate: DateTime.now(),
                 lastDate: DateTime.now().add(
-                  const Duration(days: 365),
+                   const Duration(days: 365),
                 ),
                 showTimelineHeader: false,
-                dayProps: const EasyDayProps(
+                dayProps:  const EasyDayProps(
                   height: 79,
                   width: 58,
                   dayStructure: DayStructure.dayStrDayNum,
@@ -92,8 +92,8 @@ class TasksTap extends StatelessWidget {
         ),
         Expanded(
           child: ListView.builder(
-            padding: const EdgeInsets.only(top: 20),
-            itemBuilder: (_, index) => const TaskItem(),
+            padding:  EdgeInsets.only(top: 20),
+            itemBuilder: (_, index) =>  TaskItem(),
             itemCount: 10,
           ),
         )
