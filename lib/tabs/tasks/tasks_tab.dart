@@ -1,6 +1,7 @@
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:todo/app_theme.dart';
+import 'package:todo/models/task_model.dart';
 import 'package:todo/tabs/tasks/task_item.dart';
 
 class TasksTap extends StatelessWidget {
@@ -11,6 +12,13 @@ class TasksTap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.sizeOf(context).height;
+    List<TaskModel> tasks = List.generate(
+      10,
+      (index) => TaskModel(
+          title: 'Title$index',
+          description: 'Description $index',
+          date: DateTime.now()),
+    );
     return Column(
       children: [
         Stack(
@@ -24,7 +32,6 @@ class TasksTap extends StatelessWidget {
               top: 20,
               start: 25,
               child: SafeArea(
-
                 child: Text(
                   'To Do List',
                   style: Theme.of(context)
@@ -38,14 +45,14 @@ class TasksTap extends StatelessWidget {
               padding: EdgeInsets.only(top: screenHeight * 0.12),
               child: EasyInfiniteDateTimeLine(
                 firstDate: DateTime.now().subtract(
-                   const Duration(days: 365),
+                  const Duration(days: 365),
                 ),
                 focusDate: DateTime.now(),
                 lastDate: DateTime.now().add(
-                   const Duration(days: 365),
+                  const Duration(days: 365),
                 ),
                 showTimelineHeader: false,
-                dayProps:  const EasyDayProps(
+                dayProps: const EasyDayProps(
                   height: 79,
                   width: 58,
                   dayStructure: DayStructure.dayStrDayNum,
@@ -92,9 +99,9 @@ class TasksTap extends StatelessWidget {
         ),
         Expanded(
           child: ListView.builder(
-            padding:  EdgeInsets.only(top: 20),
-            itemBuilder: (_, index) =>  TaskItem(),
-            itemCount: 10,
+            padding: const EdgeInsets.only(top: 20),
+            itemBuilder: (_, index) => TaskItem(tasks[index]),
+            itemCount: tasks.length,
           ),
         )
       ],
