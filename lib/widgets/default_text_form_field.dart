@@ -18,6 +18,7 @@ class DefaultTextFormField extends StatelessWidget {
       controller: controller,
       validator: validator,
       decoration: InputDecoration(
+
         hintText: hintText,
       ),
     );
