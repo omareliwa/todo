@@ -42,6 +42,10 @@ class AppTheme {
         color: black,
       ),
     ),
+    appBarTheme: AppBarTheme(
+      backgroundColor: Colors.transparent,centerTitle: true,
+    ),
+    textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(foregroundColor: primary)),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(backgroundColor: primary),
     ),
