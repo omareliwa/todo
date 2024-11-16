@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/app_theme.dart';
+import 'package:todo/auth/user_provider.dart';
 import 'package:todo/firebase_functions.dart';
 import 'package:todo/models/task_model.dart';
 import 'package:todo/tabs/tasks/task_provider.dart';
@@ -130,11 +131,12 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       description: descriptionController.text,
       date: selectedDate,
     );
-    FirebaseFunction.addTaskToFirestore(task).timeout(
-      const Duration(microseconds: 100),
-      onTimeout: () {
+    String userId =
+        Provider.of<UserProvider>(context, listen: false).currentUser!.id;
+    FirebaseFunction.addTaskToFirestore(task, userId).then(
+      (value) {
         Navigator.of(context).pop();
-        Provider.of<TaskProvider>(context, listen: false).getTasks();
+        Provider.of<TaskProvider>(context, listen: false).getTasks(userId);
         Fluttertoast.showToast(
           msg: "Task Added Successfully",
           toastLength: Toast.LENGTH_LONG,

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/app_theme.dart';
+import 'package:todo/auth/login_screen.dart';
+import 'package:todo/auth/user_provider.dart';
+import 'package:todo/firebase_functions.dart';
 import 'package:todo/tabs/settings/language.dart';
+import 'package:todo/tabs/tasks/task_provider.dart';
 
 class SettingsTap extends StatefulWidget {
   const SettingsTap({super.key});
@@ -123,7 +128,15 @@ class _SettingsTapState extends State<SettingsTap> {
                     style: textTheme.titleMedium?.copyWith(fontSize: 14),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      FirebaseFunction.logOut();
+                      Navigator.of(context)
+                          .pushReplacementNamed(LoginScreen.routeName);
+                      Provider.of<TaskProvider>(context, listen: false)
+                          .resetData();
+                      Provider.of<UserProvider>(context, listen: false)
+                          .updateUser(null);
+                    },
                     icon: const Icon(
                       Icons.login_outlined,
                       size: 24,

@@ -3,6 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/app_theme.dart';
+import 'package:todo/auth/user_provider.dart';
 import 'package:todo/firebase_functions.dart';
 import 'package:todo/models/task_model.dart';
 import 'package:todo/tabs/tasks/task_provider.dart';
@@ -25,9 +26,14 @@ class TaskItem extends StatelessWidget {
           children: [
             SlidableAction(
               onPressed: (_) {
-                FirebaseFunction.deleteTaskFromFirestore(task.id)
-                    .timeout(const Duration(microseconds: 100), onTimeout: () {
-                  Provider.of<TaskProvider>(context, listen: false).getTasks();
+                String userId =
+                    Provider.of<UserProvider>(context, listen: false)
+                        .currentUser!
+                        .id;
+                FirebaseFunction.deleteTaskFromFirestore(task.id, userId)
+                    .then((value) {
+                  Provider.of<TaskProvider>(context, listen: false)
+                      .getTasks(userId);
                 }).catchError((_) {
                   Fluttertoast.showToast(
                     msg: "Some Thing Went Wrong",

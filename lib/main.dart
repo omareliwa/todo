@@ -5,19 +5,28 @@ import 'package:provider/provider.dart';
 import 'package:todo/app_theme.dart';
 import 'package:todo/auth/login_screen.dart';
 import 'package:todo/auth/register_screen.dart';
+import 'package:todo/auth/user_provider.dart';
 import 'package:todo/home_screen.dart';
+import 'package:todo/tabs/settings/setting_provider.dart';
 import 'package:todo/tabs/tasks/task_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await FirebaseFirestore.instance.disableNetwork();
-  runApp(
-    ChangeNotifierProvider(
-      create: (_) => TaskProvider(),
-      child: TodoApp(),
-    ),
-  );
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (_) => SettingProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => TaskProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => UserProvider(),
+      ),
+    ],
+    child: const TodoApp(),
+  ));
 }
 
 class TodoApp extends StatelessWidget {
@@ -29,10 +38,10 @@ class TodoApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         HomeScreen.routeName: (_) => const HomeScreen(),
-        LoginScreen.routeName:(_)=>LoginScreen(),
-        RegisterScreen.routeName:(_)=>RegisterScreen(),
+        LoginScreen.routeName: (_) => LoginScreen(),
+        RegisterScreen.routeName: (_) => RegisterScreen(),
       },
-      initialRoute: HomeScreen.routeName,
+      initialRoute: LoginScreen.routeName,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.light,
