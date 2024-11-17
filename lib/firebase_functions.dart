@@ -21,7 +21,7 @@ class FirebaseFunction {
             toFirestore: (taskModel, _) => taskModel.toJson(),
           );
 
-  static Future<void> addTaskToFirestore(TaskModel task , String userId) {
+  static Future<void> addTaskToFirestore(TaskModel task, String userId) {
     CollectionReference<TaskModel> taskCollection = getTasksCollection(userId);
     DocumentReference<TaskModel> doc = taskCollection.doc();
     task.id = doc.id;
@@ -34,9 +34,19 @@ class FirebaseFunction {
     return querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList();
   }
 
-  static Future<void> deleteTaskFromFirestore(String taskId , String userId) async {
+  static Future<void> deleteTaskFromFirestore(
+      String taskId, String userId) async {
     CollectionReference<TaskModel> taskCollection = getTasksCollection(userId);
     return taskCollection.doc(taskId).delete();
+  }
+
+  static Future<void> editTaskInFirestore({
+    required String userId,
+    required String taskId,
+    required Map<String, dynamic> updatedFields,
+  }) async {
+    CollectionReference<TaskModel> taskCollection = getTasksCollection(userId);
+    await taskCollection.doc(taskId).update(updatedFields);
   }
 
   static Future<UserModel> register(

@@ -9,6 +9,7 @@ import 'package:todo/auth/user_provider.dart';
 import 'package:todo/home_screen.dart';
 import 'package:todo/tabs/settings/setting_provider.dart';
 import 'package:todo/tabs/tasks/task_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +17,9 @@ Future<void> main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(
-        create: (_) => SettingProvider(),
+        create: (_) => SettingProvider()
+         // ..currentThemes()
+          ..currentLang(),
       ),
       ChangeNotifierProvider(
         create: (_) => TaskProvider(),
@@ -25,7 +28,7 @@ Future<void> main() async {
         create: (_) => UserProvider(),
       ),
     ],
-    child: const TodoApp(),
+    child: TodoApp(),
   ));
 }
 
@@ -34,6 +37,8 @@ class TodoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SettingProvider settingProvider = Provider.of<SettingProvider>(context);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
@@ -44,10 +49,12 @@ class TodoApp extends StatelessWidget {
       initialRoute: LoginScreen.routeName,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.light,
-      // localizationsDelegates: AppLocalizations.localizationsDelegates,
-      // supportedLocales: AppLocalizations.supportedLocales,
-      // locale: Locale(settingProvider.langCode),
+
+      themeMode: settingProvider.isDark?ThemeMode.dark:ThemeMode.light,
+    //  themeMode: settingProvider.themeMode,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: Locale(settingProvider.langCode),
     );
   }
 }

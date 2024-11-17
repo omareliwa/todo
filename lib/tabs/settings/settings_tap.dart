@@ -7,6 +7,9 @@ import 'package:todo/firebase_functions.dart';
 import 'package:todo/tabs/settings/language.dart';
 import 'package:todo/tabs/tasks/task_provider.dart';
 
+import 'setting_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class SettingsTap extends StatefulWidget {
   const SettingsTap({super.key});
 
@@ -23,6 +26,8 @@ class _SettingsTapState extends State<SettingsTap> {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
+    SettingProvider settingProvider = Provider.of<SettingProvider>(context);
+
     return Column(
       children: [
         Container(
@@ -30,13 +35,8 @@ class _SettingsTapState extends State<SettingsTap> {
           height: MediaQuery.sizeOf(context).height * 0.18,
           width: double.infinity,
           color: AppTheme.primary,
-          child: Text(
-            'Settings',
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium
-                ?.copyWith(color: AppTheme.white),
-          ),
+          child: Text(AppLocalizations.of(context)!.setting,
+              style: Theme.of(context).textTheme.titleMedium),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18.0),
@@ -47,15 +47,21 @@ class _SettingsTapState extends State<SettingsTap> {
                 height: 35,
               ),
               Text(
-                'Language',
-                style: textTheme.titleMedium?.copyWith(fontSize: 14),
+                AppLocalizations.of(context)!.language,
+                style: textTheme.titleMedium?.copyWith(
+                    fontSize: 14,
+                    color: settingProvider.isDark
+                        ? AppTheme.white
+                        : AppTheme.black),
               ),
               Padding(
                 padding: const EdgeInsets.all(32.0),
                 child: Container(
                   decoration: BoxDecoration(
                       border: Border.all(color: AppTheme.primary),
-                      color: AppTheme.white,
+                      color: settingProvider.isDark
+                          ? AppTheme.black
+                          : AppTheme.white,
                       borderRadius: BorderRadius.circular(5)),
                   height: MediaQuery.sizeOf(context).height * 0.07,
                   width: MediaQuery.sizeOf(context).height * 0.7,
@@ -64,19 +70,31 @@ class _SettingsTapState extends State<SettingsTap> {
                       padding: const EdgeInsetsDirectional.only(start: 12),
                       iconEnabledColor: AppTheme.primary,
                       isExpanded: true,
-                      value: 'en',
+                      value: settingProvider.langCode,
                       borderRadius: BorderRadius.circular(15),
                       items: [
                         DropdownMenuItem(
                           value: 'en',
-                          child: Text('English', style: textTheme.titleSmall),
+                          child: Text(
+                            'English',
+                            style: textTheme.titleSmall?.copyWith(
+                                color: settingProvider.isDark
+                                    ? AppTheme.white
+                                    : AppTheme.black),
+                          ),
                         ),
                         DropdownMenuItem(
                           value: 'ar',
-                          child: Text('العربية', style: textTheme.titleSmall),
+                          child: Text('العربية',
+                              style: textTheme.titleSmall?.copyWith(
+                                  color: settingProvider.isDark
+                                      ? AppTheme.white
+                                      : AppTheme.black)),
                         ),
                       ],
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        settingProvider.changeLang(value ?? 'English');
+                      },
                     ),
                   ),
                 ),
@@ -85,37 +103,56 @@ class _SettingsTapState extends State<SettingsTap> {
                 height: 25,
               ),
               Text(
-                'Mode',
-                style: textTheme.titleMedium?.copyWith(fontSize: 14),
+                AppLocalizations.of(context)!.mode,
+                style: textTheme.titleMedium?.copyWith(
+                    fontSize: 14,
+                    color: settingProvider.isDark
+                        ? AppTheme.white
+                        : AppTheme.black),
               ),
               Padding(
                 padding: const EdgeInsets.all(32.0),
                 child: Container(
                   decoration: BoxDecoration(
                       border: Border.all(color: AppTheme.primary),
-                      color: AppTheme.white,
+                      color: settingProvider.isDark
+                          ? AppTheme.black
+                          : AppTheme.white,
                       borderRadius: BorderRadius.circular(5)),
                   height: MediaQuery.sizeOf(context).height * 0.07,
                   width: MediaQuery.sizeOf(context).height * 0.7,
                   child: DropdownButtonHideUnderline(
-                    child: DropdownButton(
+                    child: DropdownButton<String>(
                       iconEnabledColor: AppTheme.primary,
                       padding: const EdgeInsetsDirectional.only(start: 12),
                       isExpanded: true,
-                      value: 'dark',
+                      value: settingProvider.isDark ? 'Dark' : 'Light',
                       borderRadius: BorderRadius.circular(15),
+                      onChanged: (String? newValue) {
+                        if (newValue != null) {
+                          settingProvider.changeTheme();
+                        }
+                      },
                       items: [
                         DropdownMenuItem(
-                          value: 'dark',
-                          child: Text('Dark Mode', style: textTheme.titleSmall),
-                        ),
+                            value: 'Light',
+                            child: Text(
+                              AppLocalizations.of(context)!.light,
+                              style: textTheme.titleSmall?.copyWith(
+                                  color: settingProvider.isDark
+                                      ? AppTheme.white
+                                      : AppTheme.black),
+                            )),
                         DropdownMenuItem(
-                          value: 'light',
-                          child:
-                              Text('Light Mode', style: textTheme.titleSmall),
-                        ),
+                            value: 'Dark',
+                            child: Text(
+                              AppLocalizations.of(context)!.dark,
+                              style: textTheme.titleSmall?.copyWith(
+                                  color: settingProvider.isDark
+                                      ? AppTheme.white
+                                      : AppTheme.black),
+                            )),
                       ],
-                      onChanged: (value) {},
                     ),
                   ),
                 ),
@@ -124,8 +161,12 @@ class _SettingsTapState extends State<SettingsTap> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Logout',
-                    style: textTheme.titleMedium?.copyWith(fontSize: 14),
+                    AppLocalizations.of(context)!.logOut,
+                    style: textTheme.titleMedium?.copyWith(
+                        fontSize: 14,
+                        color: settingProvider.isDark
+                            ? AppTheme.white
+                            : AppTheme.black),
                   ),
                   IconButton(
                     onPressed: () {
@@ -137,9 +178,12 @@ class _SettingsTapState extends State<SettingsTap> {
                       Provider.of<UserProvider>(context, listen: false)
                           .updateUser(null);
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.login_outlined,
                       size: 24,
+                      color: settingProvider.isDark
+                          ? AppTheme.white
+                          : AppTheme.black,
                     ),
                   ),
                 ],

@@ -1,3 +1,17 @@
 {
-  "todoList": "Todo List"
+  "todoList": "Todo List",
+  "setting": "Setting",
+  "language": "Language",
+  "mode": "Mode",
+  "logOut": "LogOut",
+  "addNewTask": "Add New Task",
+  "enterTaskTitle": "Enter Task Title",
+  "enterDesc": "Enter Task Description",
+  "selectDate": "SelectDate",
+  "add": "Add",
+  "delete": "Delete",
+  "edit": "Edit",
+  "done": "Done",
+  "dark": "Dark",
+  "light": "Light"
 }

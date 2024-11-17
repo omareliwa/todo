@@ -6,9 +6,11 @@ import 'package:todo/app_theme.dart';
 import 'package:todo/auth/user_provider.dart';
 import 'package:todo/firebase_functions.dart';
 import 'package:todo/models/task_model.dart';
+import 'package:todo/tabs/settings/setting_provider.dart';
 import 'package:todo/tabs/tasks/task_provider.dart';
 import 'package:todo/widgets/default_elevated_button.dart';
 import 'package:todo/widgets/default_text_form_field.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
   const AddTaskBottomSheet({super.key});
@@ -27,16 +29,17 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   @override
   Widget build(BuildContext context) {
     TextStyle? titleMediumStyle = Theme.of(context).textTheme.titleMedium;
+    SettingProvider settingProvider = Provider.of(context);
     return Padding(
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Container(
-        decoration: const BoxDecoration(
-            borderRadius: BorderRadius.horizontal(
+        decoration: BoxDecoration(
+            borderRadius: const BorderRadius.horizontal(
               left: Radius.circular(15),
               right: Radius.circular(15),
             ),
-            color: AppTheme.white),
+            color: settingProvider.isDark ? AppTheme.black : AppTheme.white),
         height: MediaQuery.sizeOf(context).height * 0.6,
         padding: const EdgeInsets.all(20),
         child: Form(
@@ -45,15 +48,18 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             child: Column(
               children: [
                 Text(
-                  'Add new task',
-                  style: titleMediumStyle,
+                  AppLocalizations.of(context)!.addNewTask,
+                  style: titleMediumStyle?.copyWith(
+                      color: settingProvider.isDark
+                          ? AppTheme.white
+                          : AppTheme.black),
                 ),
                 const SizedBox(
                   height: 16,
                 ),
                 DefaultTextFormField(
                   controller: titleController,
-                  hintText: 'Enter task title',
+                  hintText: AppLocalizations.of(context)!.enterTaskTitle,
                   validator: (value) {
                     //لحذف المسافات
                     // value?.trim();
@@ -68,7 +74,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 ),
                 DefaultTextFormField(
                   controller: descriptionController,
-                  hintText: 'Enter task description',
+                  hintText: AppLocalizations.of(context)!.enterDesc,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
                       return 'Description can not be empty';
@@ -80,9 +86,12 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   height: 16,
                 ),
                 Text(
-                  'Select date',
-                  style:
-                      titleMediumStyle?.copyWith(fontWeight: FontWeight.w400),
+                  AppLocalizations.of(context)!.selectDate,
+                  style: titleMediumStyle?.copyWith(
+                      fontWeight: FontWeight.w400,
+                      color: settingProvider.isDark
+                          ? AppTheme.white
+                          : AppTheme.black),
                 ),
                 const SizedBox(
                   height: 8,
@@ -111,7 +120,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   height: 32,
                 ),
                 DefaultElevatedButton(
-                    label: 'Add',
+                    label: AppLocalizations.of(context)!.add,
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         addTask();
@@ -125,7 +134,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     );
   }
 
-  void addTask() {
+   void addTask() {
     TaskModel task = TaskModel(
       title: titleController.text,
       description: descriptionController.text,

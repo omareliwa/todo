@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/app_theme.dart';
 import 'package:todo/auth/user_provider.dart';
+import 'package:todo/tabs/settings/setting_provider.dart';
 import 'package:todo/tabs/tasks/task_item.dart';
 import 'package:todo/tabs/tasks/task_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TasksTap extends StatefulWidget {
   const TasksTap({super.key});
@@ -20,6 +22,7 @@ class _TasksTapState extends State<TasksTap> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.sizeOf(context).height;
     TaskProvider taskProvider = Provider.of<TaskProvider>(context);
+    SettingProvider settingProvider = Provider.of<SettingProvider>(context);
     String userId =
         Provider.of<UserProvider>(context, listen: false).currentUser!.id;
     if (shouldGetTask) {
@@ -39,18 +42,16 @@ class _TasksTapState extends State<TasksTap> {
               top: 20,
               start: 25,
               child: SafeArea(
-                child: Text(
-                  'To Do List',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(color: AppTheme.white),
-                ),
+                child: Text(AppLocalizations.of(context)!.todoList,
+                    style: Theme.of(context).textTheme.titleMedium
+                    // ?.copyWith(color: AppTheme.white),
+                    ),
               ),
             ),
             Padding(
               padding: EdgeInsets.only(top: screenHeight * 0.12),
               child: EasyInfiniteDateTimeLine(
+                locale: settingProvider.langCode,
                 firstDate: DateTime.now().subtract(
                   const Duration(days: 365),
                 ),
@@ -61,23 +62,25 @@ class _TasksTapState extends State<TasksTap> {
                 onDateChange: (selectedDate) =>
                     taskProvider.getSelectedDateTasks(selectedDate, userId),
                 showTimelineHeader: false,
-                dayProps: const EasyDayProps(
+                dayProps: EasyDayProps(
                   height: 79,
                   width: 58,
                   dayStructure: DayStructure.dayStrDayNum,
                   activeDayStyle: DayStyle(
                     decoration: BoxDecoration(
-                      color: AppTheme.white,
-                      borderRadius: BorderRadius.all(
+                      color: settingProvider.isDark
+                          ? AppTheme.black
+                          : AppTheme.white,
+                      borderRadius: const BorderRadius.all(
                         Radius.circular(5),
                       ),
                     ),
-                    dayNumStyle: TextStyle(
+                    dayNumStyle: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                       color: AppTheme.primary,
                     ),
-                    dayStrStyle: TextStyle(
+                    dayStrStyle: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                       color: AppTheme.primary,
@@ -85,38 +88,50 @@ class _TasksTapState extends State<TasksTap> {
                   ),
                   inactiveDayStyle: DayStyle(
                     decoration: BoxDecoration(
-                      color: AppTheme.white,
-                      borderRadius: BorderRadius.all(
+                      color: settingProvider.isDark
+                          ? AppTheme.black
+                          : AppTheme.white,
+                      borderRadius: const BorderRadius.all(
                         Radius.circular(5),
                       ),
                     ),
                     dayNumStyle: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: AppTheme.black,
+                      color: settingProvider.isDark
+                          ? AppTheme.white
+                          : AppTheme.black,
                     ),
                     dayStrStyle: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: AppTheme.black,
+                      color: settingProvider.isDark
+                          ? AppTheme.white
+                          : AppTheme.black,
                     ),
                   ),
                   todayStyle: DayStyle(
                     decoration: BoxDecoration(
-                      color: AppTheme.white,
-                      borderRadius: BorderRadius.all(
+                      color: settingProvider.isDark
+                          ? AppTheme.black
+                          : AppTheme.white,
+                      borderRadius: const BorderRadius.all(
                         Radius.circular(5),
                       ),
                     ),
                     dayNumStyle: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: AppTheme.black,
+                      color: settingProvider.isDark
+                          ? AppTheme.white
+                          : AppTheme.black,
                     ),
                     dayStrStyle: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: AppTheme.black,
+                      color: settingProvider.isDark
+                          ? AppTheme.white
+                          : AppTheme.black,
                     ),
                   ),
                 ),

@@ -1,3 +1,19 @@
 {
-  "todoList": " قائمة المهام"
+  "todoList": " قائمة المهام",
+  "setting": "الاعدادات",
+  "language": "اللغة",
+  "mode": "الوضع",
+  "logOut": "تسجيل الخروج",
+  "addNewTask": "اضافة مهمة جديدة",
+  "enterTaskTitle": "ادخل العنوان",
+  "enterDesc": "ادخل الوصف",
+  "selectDate": "اختر التاريخ",
+  "add": "اضافة",
+  "delete": "مسح",
+  "edit": "تعديل",
+  "done": "تم",
+  "dark": "الداكن",
+  "light": "فاتح"
+
+
 }
